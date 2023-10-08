@@ -1,0 +1,58 @@
+
+let users = [{"id":"1", "name":"David"}]
+
+
+const addUser = function ({id, name}) {
+
+    const user = {
+        id: id,
+        name: name
+    }
+
+    users.push(user);
+    return user;
+}
+
+const getUsers = function () {
+    return users;
+}
+
+const updateUser = function ({id, name, newId, newName}) { 
+    let updated = false;
+
+    for (let i = 0; i < users.length; i++) {
+        if(users[i].name === name && users[i].id === id) {
+            updated = true;
+            users[i].name = newName;
+            users[i].id = newId;
+            break;
+        }
+    }
+
+    if (updated) return "User updated successfully"
+
+    return "User not updated successfully"
+}
+
+const removeUser = function ({id, name}) {
+    let deleted = false;
+
+    for (let i = 0; i < users.length; i++) {
+        if (users[i].id === id && users[i].name === name) {
+            delete[users[i]];
+
+            deleted = true;
+        }
+    }
+
+    if (deleted) return "User deleted successfully"
+
+    return "User not deleted successfully"
+}
+
+module.exports ={
+addUser,
+getUsers,
+updateUser,
+removeUser
+}

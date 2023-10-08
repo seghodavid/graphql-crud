@@ -1,0 +1,23 @@
+const { buildSchema } = require('graphql');
+
+const schema = buildSchema(`
+    type Query {
+        get: [User!]!
+    }
+
+    type Mutation {
+        post(id: String!, name: String!): User!
+
+        update(id: String!, name: String!, newId: String!, newName: String!): String!
+
+        remove (id: String!, name: String!): String!
+    }
+
+    type User {
+        id: String!
+        name: String!
+    }
+`)
+
+
+module.exports = schema
