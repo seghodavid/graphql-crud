@@ -39,9 +39,9 @@ const removeUser = function ({id, name}) {
 
     for (let i = 0; i < users.length; i++) {
         if (users[i].id === id && users[i].name === name) {
-            delete[users[i]];
+           deleted = true;
 
-            deleted = true;
+           delete users[i];
         }
     }
 

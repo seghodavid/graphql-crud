@@ -7,8 +7,8 @@ const resolver = require('./Resolvers/resolver.graphql')
 const rootValue ={
     post: (id, name) => resolver.addUser(id, name),
     get: () => resolver.getUsers(),
-    updateUser: (id,name, newId, newName) => resolver.updateUser(id, name, newId, newName),
-    deleteUser: (id,name) => resolver.deleteUser(id,name),
+    update: (id,name, newId, newName) => resolver.updateUser(id, name, newId, newName),
+    remove: (id,name) => resolver.removeUser(id,name),
 }
 
 
