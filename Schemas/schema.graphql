@@ -5,6 +5,7 @@ const schema = buildSchema(`
         get: [User!]!
     }
 
+    # BASIC HTTP REQUEST
     type Mutation {
         post(id: String!, name: String!): User!
 
