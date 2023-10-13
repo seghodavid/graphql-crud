@@ -1,24 +1,83 @@
-const { buildSchema } = require('graphql');
+const { 
+  GraphQLObjectType, 
+  GraphQLString,
+  GraphQLSchema,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLInt,
+  GraphQLID
+} = require('graphql');
+const {
+    addUser,
+getUsers,
+updateUser,
+removeUser
+} = require('../Resolvers/resolver.graphql')
 
-const schema = buildSchema(`
-    type Query {
-        get: [User!]!
-    }
+const User = require('./user.schema.js');
 
-    # BASIC HTTP REQUEST
-    type Mutation {
-        post(id: String!, name: String!): User!
-
-        update(id: String!, name: String!, newId: String!, newName: String!): String!
-
-        remove (id: String!, name: String!): String!
-    }
-
-    type User {
-        id: String!
-        name: String!
-    }
-`)
+const UserType = new GraphQLObjectType ({
+    name: 'User',
+    fields: () => ({
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        email: { type: GraphQLString },
+        password: { type: GraphQLString },
+        age: { type: GraphQLInt },
+    })
+});
 
 
-module.exports = schema
+const schema = new GraphQLSchema({
+    query: new GraphQLObjectType({
+        name: 'Query',
+        fields: {
+            get: {
+                type: new GraphQLList(UserType),
+                resolve() {
+                    return getUsers();
+                }
+            }
+        }
+    }),
+
+    mutation: new GraphQLObjectType({
+        name: 'Mutation',
+        fields: {
+            post: {
+                type: UserType,
+                args: {
+                    name: { type: GraphQLString },
+                    email: { type: GraphQLString },
+                    password: { type: GraphQLString },
+                    age: { type: GraphQLString }
+                },
+                resolve(parent, args) {
+                    return addUser(args);
+                }
+            },
+            update: {
+                type: GraphQLString,
+                args: {
+                    id: { type: GraphQLID },
+                    name: { type: GraphQLString },
+                    newName: { type: GraphQLString }
+                },
+                resolve(parent, args) {
+                    return updateUser(args); 
+                }
+            },
+            remove: {
+                type: GraphQLString,
+                args: {
+                    id: { type: GraphQLID }
+                },
+                resolve(parent, args) {
+                    return removeUser(args); // Call your resolver function to remove a user
+                }
+            }
+        }
+    })
+});
+
+module.exports = schema;

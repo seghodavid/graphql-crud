@@ -2,19 +2,29 @@ const { buildSchema} = require('graphql');
 const express = require("express");
 const { graphqlHTTP } = require("express-graphql");
 const schema = require('./Schemas/schema.graphql')
-const resolver = require('./Resolvers/resolver.graphql')
+const {
+    addUser,
+getUsers,
+updateUser,
+removeUser
+} = require('./Resolvers/resolver.graphql')
+const connectDatabase = require('./db/db.config');
 
-const rootValue ={
-    post: (id, name) => resolver.addUser(id, name),
-    get: () => resolver.getUsers(),
-    update: (id,name, newId, newName) => resolver.updateUser(id, name, newId, newName),
-    remove: (id,name) => resolver.removeUser(id,name),
-}
+const rootValue = {
+  post: (args) => addUser(args),
+  get: () => getUsers(),
+  update: (args) => updateUser(args),
+  remove: (args) => removeUser(args),
+};
+
 
 
 const app = express()
 
 app.use('/graphql', graphqlHTTP({schema, rootValue, graphiql: true}))
+
+//initialize the database connection
+connectDatabase();
 
 app.listen(4000)
 

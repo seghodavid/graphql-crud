@@ -1,53 +1,44 @@
+  const User = require('../Schemas/user.schema.js')
 
-let users = [{"id":"1", "name":"David"}]
 
-
-const addUser = function ({id, name}) {
-
-    const user = {
-        id: id,
-        name: name
-    }
-
-    users.push(user);
+const addUser = async function ({name, email, password, age}) {
+    const user = await User.create({
+        name: name,
+        email: email,
+        password: password,
+        age: age
+    });
     return user;
 }
 
-const getUsers = function () {
-    return users;
+const getUsers = async function () {
+    return await User.find();
 }
 
-const updateUser = function ({id, name, newId, newName}) { 
-    let updated = false;
-
-    for (let i = 0; i < users.length; i++) {
-        if(users[i].name === name && users[i].id === id) {
-            updated = true;
-            users[i].name = newName;
-            users[i].id = newId;
-            break;
+const updateUser = async function ({id, name, newName}) {
+    try {
+        const user = await User.findById(id);
+        if (!user) {
+            return "User not found";
         }
+        user.name = newName;
+        await user.save();
+        return "User updated successfully";
+    } catch (error) {
+        return error.message;
     }
-
-    if (updated) return "User updated successfully"
-
-    return "User not updated successfully"
 }
 
-const removeUser = function ({id, name}) {
-    let deleted = false;
-
-    for (let i = 0; i < users.length; i++) {
-        if (users[i].id === id && users[i].name === name) {
-           deleted = true;
-
-           delete users[i];
+const removeUser = async function ({id}) {
+    try {
+        const user = await User.findByIdAndDelete(id);
+        if (!user) {
+            return "User not found";
         }
+        return "User deleted successfully";
+    } catch (error) {
+        return error.message;
     }
-
-    if (deleted) return "User deleted successfully"
-
-    return "User not deleted successfully"
 }
 
 module.exports ={
