@@ -1,6 +1,5 @@
-const { 
-  GraphQLObjectType, 
-  GraphQLString,
+const {
+  GraphQLObjectType,
   GraphQLSchema,
   GraphQLList,
   GraphQLNonNull,
@@ -73,7 +72,7 @@ const schema = new GraphQLSchema({
                     id: { type: GraphQLID }
                 },
                 resolve(parent, args) {
-                    return removeUser(args); // Call your resolver function to remove a user
+                    return removeUser(args);
                 }
             }
         }
